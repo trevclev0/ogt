@@ -1,0 +1,8 @@
+node_modules/
+serverLog.log
+config.js
+*.*~
+public/presentations/Test Presentation 1
+public/presentations/Changed Presentation 1
+
+.env

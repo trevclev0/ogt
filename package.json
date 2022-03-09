@@ -1,0 +1,44 @@
+{
+	"name": "OGT",
+	"version": "0.0.1",
+	"description": "Online Group Therapy - A Hangout for Mental Health",
+	"dependencies": {
+		"socket.io": "latest",
+		"express": "latest",
+		"jade": "latest",
+		"mysql": "latest",
+		"jquery": "latest",
+		"should": "latest",
+		"assert": "latest",
+		"supertest": "latest",
+		"winston": "latest",
+		"passport": "latest",
+		"passport-google-oauth":"latest",
+		"passport-facebook":"latest",
+		"peer":"latest",
+		"ejs": "latest",
+		"passport-local": "latest",
+		"async": "latest",
+		"cookie" : "latest",
+		"cookie-signature": "latest"	   
+	},
+	"author": "MattHigbee",
+	"contributors": [
+		{
+			"name": "MikeDeMille",
+			"email": "mjdemille@gmail.com"
+		},
+		{
+			"name": "TrevorDuran",
+			"email": "trevclev0@gmail.com"
+		},
+		{
+			"name": "JustinTangren",
+			"email": "justin.l.tangren@gmail.com"
+		}
+	],
+	"repository": {
+		"type": "git",
+		"url": "https: //trevclev0@bitbucket.org/mhigbee/online-therapy.git"
+	}
+}

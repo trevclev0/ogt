@@ -1,0 +1,81 @@
+<!doctype html>
+ 
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>jQuery UI Datepicker</title>
+
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+		<link rel="stylesheet" href="jquery.ui.timepicker.css" />
+		
+		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+		<script src="jquery.ui.timepicker.js"></script>
+
+
+		<script>
+			$(function() {
+				$(".datepicker").datepicker();
+				$('.timepicker').timepicker();
+			});
+			
+			function addSession() { 
+				var br = document.createElement("br");
+				
+				var dateLabel = document.createElement("label");
+				dateLabel.innerHTML = "Date: ";
+				
+				var dateInput = document.createElement("input");
+				dateInput.setAttribute("type", "text");
+				dateInput.setAttribute("class", "datepicker");
+				
+				var timeLabel = document.createElement("label");
+				timeLabel.innerHTML = " Time: ";
+				
+				var timeInput = document.createElement("input");
+				timeInput.setAttribute("type", "text");
+				timeInput.setAttribute("class", "timepicker");
+
+				var sessions = document.getElementById("sessions");
+				sessions.appendChild(br);
+				sessions.appendChild(dateLabel);
+				sessions.appendChild(dateInput);
+				sessions.appendChild(timeLabel);
+				sessions.appendChild(timeInput);
+				
+				$(".datepicker").datepicker();
+				$('.timepicker').timepicker({
+					showPeriod: true,
+					showLeadingZero: true
+				});
+			}
+
+		</script>
+	</head>
+	<body>
+		<h1>create class</h1>
+		
+		<form method="Post" action="/formAction/createClass" >
+			
+			
+			<br/>
+			<label>Class Name: </label><input type="text" name="classname"/>
+			<br/>
+			<label>Class Size: </label><input type="text" name="classsize"/>
+			<br/>
+			<br/>
+			
+			<div id="sessions">
+				<label>Sessions </label> 
+				<br/>
+				<label>Date: </label><input name=sessions[date] type="text" class="datepicker" />
+				<label>Time: </label><input name=sessions[time] type="text" class="timepicker" />
+			</div>
+
+			<button type="button" onclick="addSession()">add a session</button>
+			<input type="submit" value="Submit" />
+		</form>
+		
+		
+	</body>
+</html>

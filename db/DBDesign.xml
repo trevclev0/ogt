@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- SQL XML created by WWW SQL Designer, http://code.google.com/p/wwwsqldesigner/ -->
+<!-- Active URL: http://ondras.zarovi.cz/sql/demo/ -->
+<sql>
+<datatypes db="mysql">
+	<group label="Numeric" color="rgb(238,238,170)">
+	 	<type label="TINYINT" length="0" sql="TINYINT" quote=""/>
+	 	<type label="SMALLINT" length="0" sql="SMALLINT" quote=""/>
+	 	<type label="MEDIUMINT" length="0" sql="MEDIUMINT" quote=""/>
+	 	<type label="INT" length="0" sql="INT" quote=""/>
+		<type label="Integer" length="0" sql="INTEGER" quote=""/>
+		<type label="BIGINT" length="0" sql="BIGINT" quote=""/>
+		<type label="Decimal" length="1" sql="DECIMAL" re="DEC" quote=""/>
+		<type label="Single precision" length="0" sql="FLOAT" quote=""/>
+		<type label="Double precision" length="0" sql="DOUBLE" re="DOUBLE" quote=""/>
+	</group>
+
+	<group label="Character" color="rgb(255,200,200)">
+		<type label="Char" length="1" sql="CHAR" quote="'"/>
+		<type label="Varchar" length="1" sql="VARCHAR" quote="'"/>
+		<type label="Text" length="0" sql="MEDIUMTEXT" re="TEXT" quote="'"/>
+		<type label="Binary" length="1" sql="BINARY" quote="'"/>
+		<type label="Varbinary" length="1" sql="VARBINARY" quote="'"/>
+		<type label="BLOB" length="0" sql="BLOB" re="BLOB" quote="'"/>
+	</group>
+
+	<group label="Date &amp; Time" color="rgb(200,255,200)">
+		<type label="Date" length="0" sql="DATE" quote="'"/>
+		<type label="Time" length="0" sql="TIME" quote="'"/>
+		<type label="Datetime" length="0" sql="DATETIME" quote="'"/>
+		<type label="Year" length="0" sql="YEAR" quote=""/>
+		<type label="Timestamp" length="0" sql="TIMESTAMP" quote="'"/>
+	</group>
+	
+	<group label="Miscellaneous" color="rgb(200,200,255)">
+		<type label="ENUM" length="1" sql="ENUM" quote=""/>
+		<type label="SET" length="1" sql="SET" quote=""/>
+		<type label="Bit" length="0" sql="bit" quote=""/>
+	</group>
+</datatypes><table x="39" y="35" name="user_info">
+<row name="user_id" null="0" autoincrement="1">
+<datatype>MEDIUMINT(7)</datatype>
+</row>
+<row name="user_first_name" null="0" autoincrement="0">
+<datatype>VARCHAR(30)</datatype>
+</row>
+<row name="user_last_name" null="0" autoincrement="0">
+<datatype>VARCHAR(30)</datatype>
+</row>
+<row name="user_email" null="0" autoincrement="0">
+<datatype>VARCHAR(50)</datatype>
+</row>
+<row name="user_profile_picture" null="0" autoincrement="0">
+<datatype>VARCHAR(250)</datatype>
+<default>'profileImages/default.png'</default></row>
+<row name="user_type" null="0" autoincrement="0">
+<datatype>VARCHAR(15)</datatype>
+<default>'User'</default></row>
+<row name="user_bio" null="0" autoincrement="0">
+<datatype>VARCHAR(511)</datatype>
+<default>'No bio here yet!'</default></row>
+<row name="user_username" null="0" autoincrement="0">
+<datatype>VARCHAR(63)</datatype>
+</row>
+<row name="user_password" null="1" autoincrement="0">
+<datatype>VARCHAR(512)</datatype>
+<default>NULL</default></row>
+<row name="user_login_provider" null="0" autoincrement="0">
+<datatype>VARCHAR(20)</datatype>
+<default>'Local'</default></row>
+<row name="user_status" null="0" autoincrement="0">
+<datatype>VARCHAR(10)</datatype>
+<default>'Active'</default></row>
+<key type="PRIMARY" name="">
+<part>user_id</part>
+</key>
+<key type="UNIQUE" name="">
+<part>user_username</part>
+</key>
+<comment>Contains information for all users (users, therapists, and admins)</comment>
+</table>
+<table x="547" y="27" name="classes">
+<row name="class_id" null="0" autoincrement="1">
+<datatype>SMALLINT(5)</datatype>
+</row>
+<row name="therapist_id" null="0" autoincrement="0">
+<datatype>MEDIUMINT(7)</datatype>
+<relation table="user_info" row="user_id" />
+</row>
+<row name="class_name" null="0" autoincrement="0">
+<datatype>VARCHAR(50)</datatype>
+</row>
+<row name="class_size" null="0" autoincrement="0">
+<datatype>TINYINT(3)</datatype>
+</row>
+<row name="class_start_date" null="0" autoincrement="0">
+<datatype>DATE</datatype>
+</row>
+<row name="class_end_date" null="0" autoincrement="0">
+<datatype>DATE</datatype>
+</row>
+<row name="class_status" null="0" autoincrement="0">
+<datatype>VARCHAR(10)</datatype>
+<default>'Active'</default></row>
+<key type="PRIMARY" name="">
+<part>class_id</part>
+</key>
+<key type="INDEX" name="">
+<part>therapist_id</part>
+</key>
+<key type="UNIQUE" name="">
+<part>class_name</part>
+</key>
+</table>
+<table x="884" y="50" name="class_media_list">
+<row name="class_media_id" null="0" autoincrement="1">
+<datatype>INT(10)</datatype>
+</row>
+<row name="class_session_id" null="0" autoincrement="0">
+<datatype>TINYINT(8)</datatype>
+<relation table="class_sessions" row="class_session_id" />
+</row>
+<row name="media_id" null="0" autoincrement="0">
+<datatype>INT(10)</datatype>
+<relation table="class_media" row="media_id" />
+</row>
+<key type="PRIMARY" name="">
+<part>class_media_id</part>
+</key>
+<key type="INDEX" name="">
+<part>class_session_id</part>
+</key>
+<key type="INDEX" name="">
+<part>media_id</part>
+</key>
+<comment>This allows the therapist to upload media without having it associated with a class and also to associate the same media with multiple classes</comment>
+</table>
+<table x="245" y="419" name="user_billing">
+<row name="billing_id" null="0" autoincrement="1">
+<datatype>TINYINT(7)</datatype>
+</row>
+<row name="user_id" null="0" autoincrement="0">
+<datatype>MEDIUMINT(7)</datatype>
+<relation table="user_info" row="user_id" />
+</row>
+<row name="billing_cc" null="0" autoincrement="0">
+<datatype>VARCHAR(16)</datatype>
+</row>
+<row name="billing_cc_exp" null="0" autoincrement="0">
+<datatype>DATE</datatype>
+</row>
+<row name="billing_cc_type" null="0" autoincrement="0">
+<datatype>VARCHAR(20)</datatype>
+</row>
+<row name="billing_status" null="0" autoincrement="0">
+<datatype>VARCHAR(10)</datatype>
+<default>'Active'</default></row>
+<key type="PRIMARY" name="">
+<part>billing_id</part>
+</key>
+</table>
+<table x="245" y="205" name="user_addrs">
+<row name="user_addr_id" null="0" autoincrement="1">
+<datatype>MEDIUMINT(7)</datatype>
+</row>
+<row name="user_id" null="0" autoincrement="0">
+<datatype>MEDIUMINT(7)</datatype>
+<relation table="user_info" row="user_id" />
+</row>
+<row name="user_addr_street" null="0" autoincrement="0">
+<datatype>VARCHAR(50)</datatype>
+</row>
+<row name="user_addr_city" null="0" autoincrement="0">
+<datatype>VARCHAR(30)</datatype>
+</row>
+<row name="user_addr_state" null="0" autoincrement="0">
+<datatype>VARCHAR(20)</datatype>
+</row>
+<row name="user_addr_zip" null="0" autoincrement="0">
+<datatype>MEDIUMINT(10)</datatype>
+</row>
+<row name="user_addr_is_billing" null="0" autoincrement="0">
+<datatype>bit</datatype>
+<default>1</default></row>
+<row name="user_addr_status" null="0" autoincrement="0">
+<datatype>VARCHAR(10)</datatype>
+<default>'Active'</default></row>
+<key type="PRIMARY" name="">
+<part>user_addr_id</part>
+</key>
+</table>
+<table x="244" y="83" name="class_registration">
+<row name="reg_id" null="0" autoincrement="1">
+<datatype>SMALLINT(10)</datatype>
+</row>
+<row name="class_id" null="0" autoincrement="0">
+<datatype>SMALLINT(5)</datatype>
+<relation table="classes" row="class_id" />
+</row>
+<row name="user_id" null="0" autoincrement="0">
+<datatype>MEDIUMINT(7)</datatype>
+<relation table="user_info" row="user_id" />
+</row>
+<row name="reg_date" null="0" autoincrement="0">
+<datatype>DATE</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>reg_id</part>
+</key>
+<key type="INDEX" name="">
+<part>class_id</part>
+</key>
+<key type="INDEX" name="">
+<part>user_id</part>
+</key>
+</table>
+<table x="1096" y="22" name="class_media">
+<row name="media_id" null="0" autoincrement="1">
+<datatype>INT(10)</datatype>
+</row>
+<row name="media_name" null="0" autoincrement="0">
+<datatype>VARCHAR(50)</datatype>
+</row>
+<row name="media_path" null="0" autoincrement="0">
+<datatype>VARCHAR(250)</datatype>
+</row>
+<row name="media_length" null="0" autoincrement="0">
+<datatype>TINYINT(4)</datatype>
+</row>
+<row name="media_status" null="0" autoincrement="0">
+<datatype>VARCHAR(10)</datatype>
+<default>'Active'</default></row>
+<key type="PRIMARY" name="">
+<part>media_id</part>
+</key>
+</table>
+<table x="634" y="457" name="questions">
+<row name="question_id" null="0" autoincrement="1">
+<datatype>INT(15)</datatype>
+</row>
+<row name="question_text" null="0" autoincrement="0">
+<datatype>VARCHAR(255)</datatype>
+</row>
+<row name="question_type" null="0" autoincrement="0">
+<datatype>VARCHAR(20)</datatype>
+</row>
+<row name="question_during_class" null="0" autoincrement="0">
+<datatype>bit(1)</datatype>
+<default>1</default></row>
+<row name="question_status" null="0" autoincrement="0">
+<datatype>VARCHAR(10)</datatype>
+<default>'Active'</default></row>
+<key type="PRIMARY" name="">
+<part>question_id</part>
+</key>
+<key type="UNIQUE" name="">
+<part>question_text</part>
+<part>question_type</part>
+</key>
+</table>
+<table x="903" y="757" name="multiple_choice_potential_answers">
+<row name="potential_answer_id" null="0" autoincrement="1">
+<datatype>MEDIUMINT(7)</datatype>
+</row>
+<row name="potential_answer_response" null="0" autoincrement="0">
+<datatype>MEDIUMTEXT</datatype>
+<comment>Pre-determined answers available for polls</comment>
+</row>
+<row name="potential_answer_status" null="0" autoincrement="0">
+<datatype>VARCHAR(10)</datatype>
+<default>'Active'</default></row>
+<key type="PRIMARY" name="">
+<part>potential_answer_id</part>
+</key>
+</table>
+<table x="561" y="322" name="questions_given_during_class_list">
+<row name="question_class_id" null="0" autoincrement="1">
+<datatype>SMALLINT(5)</datatype>
+</row>
+<row name="question_id" null="0" autoincrement="0">
+<datatype>INT(15)</datatype>
+<relation table="questions" row="question_id" />
+</row>
+<row name="class_session_id" null="0" autoincrement="0">
+<datatype>TINYINT(8)</datatype>
+<relation table="class_sessions" row="class_session_id" />
+</row>
+<key type="PRIMARY" name="">
+<part>question_class_id</part>
+</key>
+<key type="INDEX" name="">
+<part>question_id</part>
+</key>
+<key type="INDEX" name="">
+<part>class_session_id</part>
+</key>
+<comment>Stores the questions that were asked during a given class</comment>
+</table>
+<table x="232" y="760" name="user_during_class_question_answers">
+<row name="user_class_question_answer_id" null="0" autoincrement="1">
+<datatype>MEDIUMINT(7)</datatype>
+</row>
+<row name="user_id" null="0" autoincrement="0">
+<datatype>MEDIUMINT(7)</datatype>
+<relation table="user_info" row="user_id" />
+</row>
+<row name="question_class_id" null="0" autoincrement="0">
+<datatype>SMALLINT(5)</datatype>
+<relation table="questions_given_during_class_list" row="question_class_id" />
+</row>
+<row name="user_answer_id" null="0" autoincrement="0">
+<datatype>MEDIUMINT(7)</datatype>
+<relation table="user_answers" row="user_answer_id" />
+</row>
+<key type="PRIMARY" name="">
+<part>user_class_question_answer_id</part>
+</key>
+<key type="INDEX" name="">
+<part>question_class_id</part>
+</key>
+<key type="INDEX" name="">
+<part>user_id</part>
+</key>
+</table>
+<table x="243" y="594" name="user_survey_question_answers">
+<row name="user_survey_answer_id" null="0" autoincrement="1">
+<datatype>MEDIUMINT(7)</datatype>
+</row>
+<row name="user_id" null="0" autoincrement="0">
+<datatype>MEDIUMINT(7)</datatype>
+<relation table="user_info" row="user_id" />
+</row>
+<row name="class_id" null="0" autoincrement="0">
+<datatype>SMALLINT(5)</datatype>
+<relation table="classes" row="class_id" />
+</row>
+<row name="question_id" null="0" autoincrement="0">
+<datatype>INT(15)</datatype>
+<relation table="questions" row="question_id" />
+</row>
+<row name="user_answer_id" null="0" autoincrement="0">
+<datatype>MEDIUMINT(7)</datatype>
+<relation table="user_answers" row="user_answer_id" />
+</row>
+<key type="PRIMARY" name="">
+<part>user_survey_answer_id</part>
+</key>
+<key type="INDEX" name="">
+<part>class_id</part>
+</key>
+<key type="INDEX" name="">
+<part>question_id</part>
+</key>
+<key type="INDEX" name="">
+<part>user_id</part>
+</key>
+</table>
+<table x="892" y="633" name="multiple_choice_question_answers_list">
+<row name="qa_id" null="0" autoincrement="1">
+<datatype>MEDIUMINT(7)</datatype>
+</row>
+<row name="question_id" null="0" autoincrement="0">
+<datatype>INT(15)</datatype>
+<relation table="questions" row="question_id" />
+</row>
+<row name="potential_answer_id" null="0" autoincrement="0">
+<datatype>MEDIUMINT(7)</datatype>
+<relation table="multiple_choice_potential_answers" row="potential_answer_id" />
+</row>
+<key type="PRIMARY" name="">
+<part>qa_id</part>
+</key>
+<key type="INDEX" name="">
+<part>question_id</part>
+</key>
+<key type="INDEX" name="">
+<part>potential_answer_id</part>
+</key>
+</table>
+<table x="950" y="390" name="surveys">
+<row name="survey_id" null="0" autoincrement="1">
+<datatype>MEDIUMINT(7)</datatype>
+</row>
+<row name="survey_name" null="0" autoincrement="0">
+<datatype>VARCHAR(50)</datatype>
+</row>
+<row name="survey_status" null="0" autoincrement="0">
+<datatype>VARCHAR(10)</datatype>
+<default>'Active'</default></row>
+<key type="PRIMARY" name="">
+<part>survey_id</part>
+</key>
+</table>
+<table x="935" y="508" name="survey_questions_list">
+<row name="question_list_id" null="0" autoincrement="1">
+<datatype>MEDIUMINT(7)</datatype>
+</row>
+<row name="survey_id" null="0" autoincrement="0">
+<datatype>MEDIUMINT(7)</datatype>
+<relation table="surveys" row="survey_id" />
+</row>
+<row name="question_id" null="0" autoincrement="0">
+<datatype>INT(15)</datatype>
+<relation table="questions" row="question_id" />
+</row>
+<key type="PRIMARY" name="">
+<part>question_list_id</part>
+</key>
+<key type="INDEX" name="">
+<part>survey_id</part>
+</key>
+<key type="INDEX" name="">
+<part>question_id</part>
+</key>
+</table>
+<table x="648" y="625" name="user_answers">
+<row name="user_answer_id" null="0" autoincrement="1">
+<datatype>MEDIUMINT(7)</datatype>
+</row>
+<row name="user_answer" null="0" autoincrement="0">
+<datatype>MEDIUMTEXT</datatype>
+</row>
+<key type="PRIMARY" name="">
+<part>user_answer_id</part>
+</key>
+</table>
+<table x="976" y="185" name="class_sessions">
+<row name="class_session_id" null="0" autoincrement="1">
+<datatype>TINYINT(8)</datatype>
+</row>
+<row name="class_id" null="0" autoincrement="0">
+<datatype>SMALLINT(5)</datatype>
+<relation table="classes" row="class_id" />
+</row>
+<row name="class_session_name" null="0" autoincrement="0">
+<datatype>VARCHAR(50)</datatype>
+</row>
+<row name="class_session_date" null="0" autoincrement="0">
+<datatype>DATE</datatype>
+</row>
+<row name="class_session_time" null="0" autoincrement="0">
+<datatype>TIME</datatype>
+</row>
+<row name="class_session_users_attended" null="0" autoincrement="0">
+<datatype>TINYINT(3)</datatype>
+<default>0</default></row>
+<row name="class_session_status" null="0" autoincrement="0">
+<datatype>VARCHAR(10)</datatype>
+<default>'Active'</default></row>
+<key type="PRIMARY" name="">
+<part>class_session_id</part>
+</key>
+<key type="INDEX" name="">
+<part>class_id</part>
+</key>
+<key type="UNIQUE" name="">
+<part>class_session_name</part>
+</key>
+</table>
+<table x="697" y="215" name="class_survey_list">
+<row name="class_survey_id" null="0" autoincrement="1">
+<datatype>TINYINT(5)</datatype>
+</row>
+<row name="class_id" null="0" autoincrement="0">
+<datatype>SMALLINT(5)</datatype>
+<relation table="classes" row="class_id" />
+</row>
+<row name="survey_id" null="0" autoincrement="0">
+<datatype>MEDIUMINT(7)</datatype>
+<relation table="surveys" row="survey_id" />
+</row>
+<key type="PRIMARY" name="">
+<part>class_survey_id</part>
+</key>
+<key type="INDEX" name="">
+<part>class_id</part>
+</key>
+<key type="INDEX" name="">
+<part>survey_id</part>
+</key>
+</table>
+</sql>

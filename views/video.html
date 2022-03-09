@@ -1,0 +1,167 @@
+<html>
+<head>
+	<title>PeerJS - Video chat example</title>
+	
+	<link rel="stylesheet" href="/css/videoStyle.css">
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+	<script type="text/javascript" src="http://cdn.peerjs.com/0.3/peer.js"></script>
+
+	<script>
+		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+		var peer
+		  , localStream
+		  , socket;
+
+		function init() {
+			navigator.getUserMedia(
+				{audio: true, video: true}
+				,function(stream){
+					$('#my-video').prop('src', URL.createObjectURL(stream));
+					localStream = stream;
+					
+					peer = new Peer({host: '/', port: 9000});
+					
+					peer.on('error', function(err){
+						alert(err.message);
+					});
+					
+					peer.on('open', function(){
+						$('#my-id').text(peer.id);
+						
+						setupIO();
+					});
+					
+					peer.on('call', function(call){
+						call.answer(localStream);
+						showCall(call);
+					});
+				}
+				,function(){
+					alert("Failed to access the webcam and microphone");
+				}
+			);
+		}
+
+		function setupIO(){
+			socket = io.connect('/', { 
+				query: "peerID="+peer.id 
+				+"&room="+ gup("room")
+				+"&uName="+ gup("uName") 
+			});	
+			
+			socket.on('newPeer', function(data){
+				callPeer(data.peerID);
+			});
+			
+			socket.on("peerDisconected", function(data){
+				closeCall(data.peerID);
+			});
+			
+			socket.on('message', function (data) {
+				console.log('WS message:', data);
+				if (data.message) {
+					writeToChatLog('message', data.userName, data.message);
+				}
+				else{
+					console.log('there was a problem reading data.message:', data);
+				}
+			});
+			
+			document.getElementById('msgField').addEventListener('keypress', function(e) {
+				if (e.keyCode == 13) //enter
+					sendMessage();
+			}, false);
+			document.getElementById('send').addEventListener('click', function() {
+				sendMessage();
+			}, false);
+		
+		}
+		
+		function callPeer(peerID){
+			var call = peer.call( peerID, localStream);
+			showCall(call);
+		}
+		
+		function showCall (call) {
+			call.on('stream', function(stream){
+				var video = $(document.createElement('video'));
+				video.prop('src', URL.createObjectURL(stream));
+				video.prop('autoplay', true);
+				video.prop('controls', true);
+				video.prop('id', 'video-' + call.peer);
+				
+				$('#video-container').append(video);
+				
+			});
+		
+			call.on('error', function(){
+				alert("error");
+			});
+		
+		}
+		
+		function closeCall(peerID){
+			var video = document.getElementById('video-' + peerID);
+			video.parentNode.removeChild(video);
+			
+			try{
+				peer.connections[peerID][0].close();
+			}
+			catch(e){
+			}
+		}
+				
+		function sendMessage () {
+			socket.emit('message', { message:msgField.value });
+			msgField.value = '';
+		}
+		
+		function writeToChatLog(className, user, message) {
+			var chatItem = document.createElement('p');
+			var span = document.createElement('span');
+			span.className = "bold";
+			span.textContent = user+': ';
+
+			chatItem.className = className;
+			var span2 = document.createElement('span');
+			span2.textContent = message;
+			chatLog.appendChild(chatItem);
+			chatItem.appendChild(span);
+			chatItem.appendChild(span2);
+			chatLog.scrollTop = chatLog.scrollHeight;
+		}
+	
+		function gup(name) {
+			name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+
+			var regex = new RegExp("[\\?&]" + name + "=([^&#]*)")
+			  , results = regex.exec(location.search);
+			  
+			return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+		}
+
+	</script>
+
+</head>
+
+<body onload="init()">
+
+	<div id='chat'>
+		<div id="chat-content">
+			Chat
+			<input id='msgField' type='text' placeholder='Send Message to your opponent with ENTER or button'/>
+			<button id='send' >Send</button>
+		</div>
+		<div id='chatLog'></div>
+	</div>
+					
+	<div id="video-container">
+		<video id="my-video" muted="true" autoplay="true"></video>
+	</div>
+
+</body>
+</html>
+

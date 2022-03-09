@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script>var userType = '<%= user_type %>'; var userID = '<%= user_id %>'</script>
+		<script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js'></script>
+		<script src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js'></script>
+		<script src='/js/bootstrap.min.js' type='text/javascript'></script>
+		<script src='/js/jquery.timepicker.min.js'></script>
+		<!-- <script src="/js/bootbox.min.js"></script> -->
+		<script src="/js/functions.js"></script>
+		<script src='/js/classManagement.js'></script>
+		
+		<link rel='stylesheet' href='/css/chatClient.css' />
+		<link rel='stylesheet' href='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css' />
+		<title>Class Administration</title>
+	</head>
+	<body>
+		<div id='classManagementContent'>
+			<header>
+				<h1>Class Administration</h1>
+			</header>
+			<nav id='actionButtons'></nav>
+			<ul id='classList'></ul>
+		</div>
+		<div class='modal fade' id='addClassModal' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+			<div class='modal-dialog'>
+				<div class='modal-content'>
+					<div class='modal-header'>
+						<h4 class='modal-title'>Class Details</h4>
+					</div>
+					<div class='modal-body'>
+						<form id='formAddClass' action='/api/class/addClass' method='post'>
+							<div class='modalFormGroup'>
+								<input type='hidden' id='therapist_id' name='therapist_id'/>
+								<label for='class_name'>Class Name</label>
+								<input type='text' id='class_name' name='class_name'/>
+							</div>
+							<div class='modalFormGroup'>
+								<label for='class_size'>Class Size</label>
+								<input type='text' id='class_size' name='class_size'/>
+							</div>
+							<div class='modalFormGroup'>
+								<label for='class_start'>Class Start Date</label>
+								<input id='class_start_date' class='date' name='class_start_date'/>
+							</div>
+							<div class='modalFormGroup'>
+								<label for='class_end'>Class End Date</label>
+								<input id='class_end_date' class='date' name='class_end_date'/>
+							</div>
+							<input type='submit' value='Add Class'>
+						</form>
+					</div>
+					<div class='modal-footer'></div>
+				</div>
+			</div>
+		</div>
+		<div class='modal fade' id='addSessionModal' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+			<div class='modal-dialog'>
+				<div class='modal-content'>
+					<div class='modal-header'>
+						<h4 class='modal-title'>Session Details</h4>
+					</div>
+					<div class='modal-body'>
+						<form id='formAddSession' action='/api/class/addClassSession' method='post'>
+							<div class='modalFormGroup'>
+								<input type='hidden' id='class_id' name='class_id'/>
+								<label for='class_session_name'>Session Name</label>
+								<input type='text' id='class_session_name' name='class_session_name'/>
+							</div>
+							<div class='modalFormGroup'>
+								<label for='class_session_date'>Session Date</label>
+								<input type='text' id='class_session_date' class='date' name='class_session_date'/>
+							</div>
+							<div class='modalFormGroup'>
+								<label for='class_session_time'>Session Time</label>
+								<input id='class_session_time' type='text' class='time' name='class_session_time'/>
+							</div>
+							<input type='submit' value='Add Session'>
+						</form>
+					</div>
+					<div class='modal-footer'></div>
+				</div>
+			</div>
+		</div>
+		<div class='modal fade' id='editClassModal' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+			<div class='modal-dialog'>
+				<div class='modal-content'>
+					<div class='modal-header'>
+						<h4 class='modal-title'>Class Details</h4>
+					</div>
+					<div class='modal-body'>
+						<form id='formEditClass' action='/api/class/updateClassInfo' method='post'>
+							<div class='modalFormGroup'>
+								<input type='hidden' id='edit_therapist_id' name='therapist_id'/>
+								<label for='class_name'>Class Name</label>
+								<input type='hidden' id='edit_class_name' name='class_name'/>
+								<input type='text' id='edit_new_class_name' name='new_class_name'/>
+							</div>
+							<div class='modalFormGroup'>
+								<label for='class_size'>Class Size</label>
+								<input type='text' id='edit_class_size' name='class_size'/>
+							</div>
+							<div class='modalFormGroup'>
+								<label for='class_start'>Class Start Date</label>
+								<input id='edit_class_start_date' class='date' name='class_start_date'/>
+							</div>
+							<div class='modalFormGroup'>
+								<label for='class_end'>Class End Date</label>
+								<input id='edit_class_end_date' class='date' name='class_end_date'/>
+							</div>
+							<input type='submit' value='Edit Class Name'>
+						</form>
+					</div>
+					<div class='modal-footer'></div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="uploadMediaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		      <div class="modal-content">
+		        <div class="modal-header">
+		        
+		          <h4 class="modal-title">Questions</h4>
+		        </div>
+		        <div class="modal-body">
+		             <div class="section"> 
+			<span class="centeredText">Assign Media</span>
+			<br/>
+			
+			<select id="classes" onchange="loadSessionDropdown()">
+			</select>
+
+			<select id="classSessions" onchange="loadCurrentMedia()">
+			</select>
+			<br/>
+			<br/>
+			<u>current assigned media</u>
+			<ul id="currentMedia"></ul>
+			
+			<hr/>
+			<select id="media">
+			</select>
+	
+			<button onclick="assignMedia()" >assign</button>
+			<br/>
+		
+			<div id="assignResults"></div>
+		</div>
+		<br/>
+		<br/>
+		<div class="section">
+			<span class="centeredText">Upload Media</span>
+			<br>
+
+
+			<form action="/api/media/addMedia"  onsubmit="mediaUploadStarted()"
+				method="post" enctype="multipart/form-data" target="hidden-form">
+				
+				<input type="file" name="files" />
+				<br/>
+				<input type="submit" value="Upload" />
+			</form>
+			
+			<div id="UploadMediaMessage"></div>
+
+			<IFRAME id="hidden-form" name="hidden-form" onload="mediaUploadFinished()" style="display:none"></IFRAME> 
+			
+		<div>
+		        </div>
+		        <div class="modal-footer">
+		        	
+		        </div>
+		      </div><!-- /.modal-content -->
+		    </div><!-- /.modal-dialog -->
+		</div><!-
+	</body>
+</html>

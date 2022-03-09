@@ -1,0 +1,25 @@
+
+video{
+  margin: 15px;
+  height: 200px;
+  width: auto
+  display: inline-block;
+}
+
+#large-video{
+	height: 400px;
+	width: auto;
+}
+
+#video-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width:100%;
+  
+  background-color: #eee;
+  text-align: center;
+  display: block;
+  overflow-x: scroll;
+  white-space: nowrap;
+}
